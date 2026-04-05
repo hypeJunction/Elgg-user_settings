@@ -12,6 +12,7 @@ $groups = new ElggBatch('elgg_get_entities', array(
 	'types' => 'group',
 	'limit' => 0,
 	'joins' => array(
+		// WARNING: groups_entity subtable removed in Elgg 3.0 — rewrite this SQL
 		"JOIN {$dbprefix}groups_entity ge ON e.guid = ge.guid",
 		"JOIN {$dbprefix}entity_relationships ers ON e.guid = ers.guid_two AND ers.guid_one = $user->guid",
 	),
