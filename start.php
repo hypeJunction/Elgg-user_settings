@@ -16,7 +16,6 @@ function user_settings_init()
 {
     elgg_unregister_page_handler('settings', '_elgg_user_settings_page_handler');
     elgg_register_route('settings', ['path' => '/settings/{segments}', 'resource' => 'settings', 'requirements' => ['segments' => '.+'], 'defaults' => ['segments' => '']]);
-    elgg_unregister_event_handler('pagesetup', 'system', '_elgg_user_settings_menu_setup');
     if (!elgg_get_plugin_setting('show_language', 'user_settings', true)) {
         elgg_unregister_plugin_hook_handler('usersettings:save', 'user', '_elgg_set_user_language');
         elgg_unextend_view('forms/account/settings', 'core/settings/account/language');
@@ -26,7 +25,6 @@ function user_settings_init()
     }
     elgg_register_plugin_hook_handler('route', 'profile', 'user_settings_profile_router');
     elgg_register_plugin_hook_handler('route', 'avatar', 'user_settings_avatar_router');
-    elgg_unregister_event_handler('pagesetup', 'system', 'notifications_plugin_pagesetup');
     elgg_extend_view('elgg.css', 'elements/tables/notifications.css');
     elgg_register_action('notificationsettings/save', __DIR__ . '/actions/notificationsettings/save.php');
 }

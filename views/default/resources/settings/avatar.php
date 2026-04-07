@@ -3,7 +3,7 @@
 $entity = elgg_extract('entity', $vars, elgg_get_page_owner_entity());
 
 if (!$entity instanceof ElggUser || !$entity->canEdit()) {
-	register_error(elgg_echo("profile:noaccess"));
+	elgg_register_error_message(elgg_echo("profile:noaccess"));
 	return;
 }
 
@@ -31,6 +31,6 @@ $params = array(
 	)),
 );
 
-$body = elgg_view_layout('content', $params);
+$body = elgg_view_layout('default', $params);
 
 echo elgg_view_page($title, $body);

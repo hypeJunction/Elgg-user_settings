@@ -20,7 +20,7 @@ $form = elgg_view_form('usersettings/notifications', array(
 	'user' => $entity,
 		));
 
-$layout = elgg_view_layout('content', array(
+$layout = elgg_view_layout('default', array(
 	'content' => $form,
 	'title' => $title,
 	'filter' => elgg_view('filters/settings', array(

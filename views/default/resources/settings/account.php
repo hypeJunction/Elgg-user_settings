@@ -24,6 +24,6 @@ $params = array(
 	)),
 );
 
-$body = elgg_view_layout('content', $params);
+$body = elgg_view_layout('default', $params);
 
 echo elgg_view_page($title, $body);

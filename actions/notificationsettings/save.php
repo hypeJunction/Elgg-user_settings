@@ -16,7 +16,7 @@ if (($user->guid != $current_user->guid) && !$current_user->isAdmin()) {
 	forward();
 }
 
-$NOTIFICATION_HANDLERS = _elgg_services()->notifications->getMethodsAsDeprecatedGlobal();
+$NOTIFICATION_HANDLERS = _elgg_services()->notifications->getMethods();
 $subscriptions = array();
 foreach ($NOTIFICATION_HANDLERS as $method => $foo) {
 	$personal[$method] = get_input($method.'personal');
@@ -40,6 +40,6 @@ foreach ($subscriptions as $method => $subscription) {
 	}
 }
 
-system_message(elgg_echo('notifications:subscriptions:success'));
+elgg_register_success_message(elgg_echo('notifications:subscriptions:success'));
 
 forward(REFERER);

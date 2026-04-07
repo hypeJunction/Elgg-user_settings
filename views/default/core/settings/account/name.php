@@ -7,7 +7,7 @@ if (!$user instanceof ElggUser) {
 }
 
 $title = elgg_echo('user:name:label');
-$content .= elgg_view_input('text', array(
+$content = elgg_view_input('text', array(
 	'name' => 'name',
 	'value' => $user->name,
 	'label' => elgg_echo('name'),

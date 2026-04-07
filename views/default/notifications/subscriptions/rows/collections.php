@@ -14,19 +14,14 @@ function subscriptions_compare_by_name($a, $b) {
 
 $methods = array_keys(_elgg_services()->notifications->getMethods());
 
-$dbprefix = elgg_get_config('dbprefix');
-$subscriptions = new ElggBatch('elgg_get_entities', array(
-	'selects' => array('GROUP_CONCAT(ers.relationship) as relationships'),
+// Fetch all friends of the user
+$subscriptions = elgg_get_entities([
 	'types' => 'user',
 	'limit' => 0,
-	'joins' => array(
-		"JOIN {$dbprefix}entity_relationships ers ON e.guid = ers.guid_two AND ers.guid_one = $user->guid",
-	),
-	'wheres' => array(
-		"ers.relationship = 'friend' OR ers.relationship LIKE 'notify%'"
-	),
-	'group_by' => 'e.guid',
-		));
+	'relationship' => 'friend',
+	'relationship_guid' => $user->guid,
+	'inverse_relationship' => false,
+]);
 
 $subscriptions_list = array();
 foreach ($subscriptions as $subscription) {
@@ -35,11 +30,15 @@ foreach ($subscriptions as $subscription) {
 		'use_link' => false,
 	));
 	$name = $subscription->getDisplayName();
+
+	// Check notification relationships for each method
 	$relationships = array();
-	$relationships_concat = $subscription->getVolatileData('select:relationships');
-	if ($relationships_concat) {
-		$relationships = explode(',', $relationships_concat);
+	foreach ($methods as $method) {
+		if (check_entity_relationship($user->guid, "notify{$method}", $subscription->guid)) {
+			$relationships[] = "notify{$method}";
+		}
 	}
+
 	$subscriptions_list[$subscription->guid] = array(
 		'name' => $name,
 		'view' => elgg_view_image_block($icon, $name),
@@ -82,8 +81,6 @@ $collection_id = -1;
 
 		$checkbox = elgg_view('input/checkbox', array(
 			'name' => "{$method}collections[]",
-			//'id' => "{$method}checkbox",
-			//'onclick' => "adjust{$method}('{$method}collections{$collection_id}');",
 			'value' => $collection_id,
 			'default' => false,
 			'checked' => $checked,
@@ -94,9 +91,7 @@ $collection_id = -1;
 		));
 
 		$link = elgg_view('output/url', array(
-			//'id' => "{$method}collections{$collection_id}",
 			'class' => $checked ? "{$method}toggleOn elgg-state-active" : "{$method}toggleOff elgg-state-inactive",
-			//'onclick' => "adjust{$method}_alt('{$method}collections{$collection_id}'); setCollection([{$members}],'{$method}',-1);",
 			'text' => $checkbox,
 			'href' => false,
 		));
@@ -119,8 +114,6 @@ foreach ($subscriptions_list as $subscription_guid => $subscription_data) {
 			$checked = in_array("notify{$method}", $subscription_data['relationships']);
 			$checkbox = elgg_view('input/checkbox', array(
 				'name' => "{$method}subscriptions[]",
-				//'id' => "{$method}checkbox",
-				//'onclick' => "adjust{$method}('{$method}{$subscription_guid}')",
 				'value' => $subscription_guid,
 				'default' => false,
 				'checked' => $checked,
@@ -131,9 +124,7 @@ foreach ($subscriptions_list as $subscription_guid => $subscription_data) {
 			));
 
 			$link = elgg_view('output/url', array(
-				//'id' => "{$method}{$subscription_guid}",
 				'class' => $checked ? "{$method}toggleOn elgg-state-active" : "{$method}toggleOff elgg-state-inactive",
-				//'onclick' => "adjust{$method}_alt('{$method}{$subscription_guid}');",
 				'text' => $checkbox,
 				'href' => false,
 			));
@@ -146,20 +137,22 @@ foreach ($subscriptions_list as $subscription_guid => $subscription_data) {
 	<?php
 }
 
-
-$collections = get_user_access_collections($user->guid);
+$collections = $user->getOwnedAccessCollections();
 if (empty($collections)) {
 	return;
 }
 
 foreach ($collections as $collection) {
 	$collection_id = $collection->id;
-	$members = get_members_of_access_collection($collection_id, true);
+	$members = $collection->getMembers(['guids_only' => true]);
 	$members_list = array();
 	foreach ($members as $member_guid) {
 		$member_guid = (int) $member_guid;
 		if (!isset($subscriptions_list[$member_guid])) {
 			$member = get_entity($member_guid);
+			if (!$member) {
+				continue;
+			}
 			$icon = elgg_view_entity_icon($member, 'tiny', array(
 				'use_hover' => false,
 				'use_link' => false,
@@ -206,8 +199,6 @@ foreach ($collections as $collection) {
 
 			$checkbox = elgg_view('input/checkbox', array(
 				'name' => "{$method}collections[]",
-				//'id' => "{$method}checkbox",
-				//'onclick' => "adjust{$method}('{$method}collections{$collection_id}');",
 				'value' => $collection_id,
 				'default' => false,
 				'checked' => $checked,
@@ -218,9 +209,7 @@ foreach ($collections as $collection) {
 			));
 
 			$link = elgg_view('output/url', array(
-				//'id' => "{$method}collections{$collection_id}",
 				'class' => $checked ? "{$method}toggleOn elgg-state-active" : "{$method}toggleOff elgg-state-inactive",
-				//'onclick' => "adjust{$method}_alt('{$method}collections{$collection_id}'); setCollection([{$members}],'{$method}',-1);",
 				'text' => $checkbox,
 				'href' => false,
 			));
@@ -243,8 +232,6 @@ foreach ($collections as $collection) {
 				$checked = in_array("notify{$method}", $member_data['relationships']);
 				$checkbox = elgg_view('input/checkbox', array(
 					'name' => "{$method}subscriptions[]",
-					//'id' => "{$method}checkbox",
-					//'onclick' => "adjust{$method}('{$method}{$member_guid}')",
 					'value' => $member_guid,
 					'default' => false,
 					'checked' => $checked,
@@ -255,9 +242,7 @@ foreach ($collections as $collection) {
 				));
 
 				$link = elgg_view('output/url', array(
-					//'id' => "{$method}{$member_guid}",
 					'class' => $checked ? "{$method}toggleOn elgg-state-active" : "{$method}toggleOff elgg-state-inactive",
-					//'onclick' => "adjust{$method}_alt('{$method}{$member_guid}');",
 					'text' => $checkbox,
 					'href' => false,
 				));

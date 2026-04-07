@@ -20,7 +20,7 @@ $title = elgg_echo('user:settings:statistics');
 
 $content = elgg_view("core/settings/statistics");
 
-$layout = elgg_view_layout('content', array(
+$layout = elgg_view_layout('default', array(
 	'content' => $content,
 	'title' => $title,
 	'filter' => elgg_view('filters/settings', array(

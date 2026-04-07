@@ -6,34 +6,34 @@ if (!$user instanceof ElggUser) {
 
 $methods = array_keys(_elgg_services()->notifications->getMethods());
 
-$dbprefix = elgg_get_config('dbprefix');
-$groups = new ElggBatch('elgg_get_entities', array(
-	'selects' => array('GROUP_CONCAT(ers.relationship) as relationships'),
+// Fetch all groups the user is a member of
+$groups = elgg_get_entities([
 	'types' => 'group',
 	'limit' => 0,
-	'joins' => array(
-		// WARNING: groups_entity subtable removed in Elgg 3.0 — rewrite this SQL
-		"JOIN {$dbprefix}groups_entity ge ON e.guid = ge.guid",
-		"JOIN {$dbprefix}entity_relationships ers ON e.guid = ers.guid_two AND ers.guid_one = $user->guid",
-	),
-	'wheres' => array(
-		"ers.relationship = 'member' OR ers.relationship LIKE 'notify%'"
-	),
-	'group_by' => 'e.guid',
-	'order_by' => 'ge.name',
-		));
+	'relationship' => 'member',
+	'relationship_guid' => $user->guid,
+	'inverse_relationship' => false,
+	'sort_by' => [
+		'property' => 'name',
+		'direction' => 'ASC',
+	],
+]);
 
 $groups_list = array();
 foreach ($groups as $group) {
 	$icon = elgg_view_entity_icon($group, 'tiny', array(
 		'use_link' => false,
 	));
-	$name = $group->name;
+	$name = $group->getDisplayName();
+
+	// Check notification relationships for each method
 	$relationships = array();
-	$relationships_concat = $group->getVolatileData('select:relationships');
-	if ($relationships_concat) {
-		$relationships = explode(',', $relationships_concat);
+	foreach ($methods as $method) {
+		if (check_entity_relationship($user->guid, "notify{$method}", $group->guid)) {
+			$relationships[] = "notify{$method}";
+		}
 	}
+
 	$groups_list[$group->guid] = array(
 		'view' => elgg_view_image_block($icon, $name),
 		'relationships' => $relationships,
@@ -58,8 +58,6 @@ foreach ($groups_list as $group_guid => $group_data) {
 			$checked = in_array("notify{$method}", $group_data['relationships']);
 			$checkbox = elgg_view('input/checkbox', array(
 				'name' => "{$method}subscriptions[]",
-				//'id' => "{$method}checkbox",
-				//'onclick' => "adjust{$method}('{$method}{$group_guid}')",
 				'value' => $group_guid,
 				'default' => false,
 				'checked' => $checked,
@@ -69,9 +67,7 @@ foreach ($groups_list as $group_guid => $group_data) {
 			));
 
 			$link = elgg_view('output/url', array(
-				//'id' => "{$method}{$group_guid}",
 				'class' => $checked ? "{$method}toggleOn elgg-state-active" : "{$method}toggleOff elgg-state-inactive",
-				//'onclick' => "adjust{$method}_alt('{$method}{$group_guid}');",
 				'text' => $checkbox,
 				'href' => false,
 			));

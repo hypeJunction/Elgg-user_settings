@@ -17,7 +17,7 @@ if ($plugin_id) {
 	$plugin = elgg_get_plugin_from_id($plugin_id);
 
 	if (!$plugin) {
-		register_error(elgg_echo('PluginException:InvalidID', array($plugin_id)));
+		elgg_register_error_message(elgg_echo('PluginException:InvalidID', array($plugin_id)));
 		forward(REFERER);
 	}
 
@@ -65,7 +65,7 @@ if (!$content) {
 	return;
 }
 
-$layout = elgg_view_layout('content', array(
+$layout = elgg_view_layout('default', array(
 	'content' => $content,
 	'title' => $title,
 	'filter' => $filter,
