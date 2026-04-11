@@ -1,0 +1,42 @@
+<?php
+
+return [
+	'bootstrap' => \UserSettings\Bootstrap::class,
+
+	'actions' => [
+		'notificationsettings/save' => [],
+	],
+
+	'routes' => [
+		'settings' => [
+			'path' => '/settings/{segments}',
+			'resource' => 'settings',
+			'requirements' => [
+				'segments' => '.+',
+			],
+			'defaults' => [
+				'segments' => '',
+			],
+		],
+	],
+
+	'hooks' => [
+		'route' => [
+			'notifications' => [
+				\UserSettings\Router::class . '::notificationsRoute' => [],
+			],
+			'profile' => [
+				\UserSettings\Router::class . '::profileRoute' => [],
+			],
+			'avatar' => [
+				\UserSettings\Router::class . '::avatarRoute' => [],
+			],
+		],
+	],
+
+	'view_extensions' => [
+		'elgg.css' => [
+			'elements/tables/notifications.css' => [],
+		],
+	],
+];

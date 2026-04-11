@@ -18,7 +18,7 @@ if ($plugin_id) {
 
 	if (!$plugin) {
 		elgg_register_error_message(elgg_echo('PluginException:InvalidID', array($plugin_id)));
-		forward(REFERER);
+		throw new \Elgg\Exceptions\Http\EntityNotFoundException();
 	}
 
 	if (elgg_language_key_exists($plugin_id . ':usersettings:title')) {

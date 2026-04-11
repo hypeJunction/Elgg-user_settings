@@ -10,10 +10,10 @@ $current_user = elgg_get_logged_in_user_entity();
 
 $guid = (int) get_input('guid', 0);
 if (!$guid || !($user = get_entity($guid))) {
-	forward();
+	return elgg_error_response();
 }
 if (($user->guid != $current_user->guid) && !$current_user->isAdmin()) {
-	forward();
+	return elgg_error_response();
 }
 
 $NOTIFICATION_HANDLERS = _elgg_services()->notifications->getMethods();
@@ -35,11 +35,9 @@ foreach ($NOTIFICATION_HANDLERS as $method => $foo) {
 foreach ($subscriptions as $method => $subscription) {
 	if (is_array($subscription) && !empty($subscription)) {
 		foreach ($subscription as $subscriptionperson) {
-			elgg_add_subscription($user->guid, $method, $subscriptionperson);
+			$user->addRelationship($subscriptionperson, 'notify' . $method);
 		}
 	}
 }
 
-elgg_register_success_message(elgg_echo('notifications:subscriptions:success'));
-
-forward(REFERER);
+return elgg_ok_response('', elgg_echo('notifications:subscriptions:success'));
