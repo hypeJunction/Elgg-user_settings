@@ -4,6 +4,11 @@ if (!$user instanceof ElggUser) {
 	return;
 }
 
+/**
+ * @param mixed $a
+ * @param mixed $b
+ * @return mixed
+ */
 function subscriptions_compare_by_name($a, $b) {
 	$an = $a['name'];
 	$bn = $b['name'];

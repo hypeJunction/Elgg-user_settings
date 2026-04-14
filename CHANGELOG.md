@@ -1,3 +1,16 @@
+<a name="1.2.0"></a>
+# [1.2.0] - 2026-04-14
+
+### Migration: Elgg 4.x
+
+* Removed `manifest.xml` — plugin metadata moved to `elgg-plugin.php` `'plugin'` key
+* Updated `composer.json`: `php >=7.4`, `elgg/elgg ^4.0`, `composer/installers ^2.0`
+* **actions/notificationsettings/save.php**: `set_user_notification_setting()` removed in 4.x → `$user->setNotificationSetting()`
+* **views/notifications/subscriptions/rows/personal.php**: `get_user_notification_settings()` removed → `$user->getNotificationSettings()` (returns array, not object)
+* **views/plugins/user_settings/settings.php**: `elgg_view_input()` removed → `elgg_view_field()` with `#type`/`#label` keys
+* Dropped `forms_api` runtime dependency — plugin now uses core `elgg_view_field()` directly
+* Tests updated: `\Elgg\Hook` is now an interface; use `\Elgg\HooksRegistrationService\Hook(elgg(), name, type, value, params)`
+
 <a name="1.1.2"></a>
 ## [1.1.2](https://github.com/hypeJunction/Elgg-user_settings/compare/1.1.1...v1.1.2) (2016-03-25)
 

@@ -17,20 +17,32 @@ class PluginRegistrationTest extends IntegrationTestCase {
     public function down() {
     }
 
+    /**
+     * @return string
+     */
     public function getPluginID(): string {
         return '';
     }
 
+    /**
+     * @return void
+     */
     public function testNotificationSettingsSaveActionIsRegistered(): void {
         $actions = _elgg_services()->actions->getAllActions();
         $this->assertArrayHasKey('notificationsettings/save', $actions);
     }
 
+    /**
+     * @return void
+     */
     public function testSettingsRouteIsRegistered(): void {
         $routes = _elgg_services()->routes->all();
         $this->assertArrayHasKey('settings', $routes);
     }
 
+    /**
+     * @return void
+     */
     public function testKeySettingsViewsExist(): void {
         $views = [
             'resources/settings/user',
@@ -55,6 +67,9 @@ class PluginRegistrationTest extends IntegrationTestCase {
         }
     }
 
+    /**
+     * @return void
+     */
     public function testNotificationSubscriptionsTableRenders(): void {
         $user = $this->createUser();
         elgg_get_session()->setLoggedInUser($user);
@@ -68,6 +83,9 @@ class PluginRegistrationTest extends IntegrationTestCase {
         elgg_get_session()->removeLoggedInUser();
     }
 
+    /**
+     * @return void
+     */
     public function testPluginSettingsViewRendersWithDefaults(): void {
         $plugin = elgg_get_plugin_from_id('user_settings');
         if (!$plugin) {

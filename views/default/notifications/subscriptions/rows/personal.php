@@ -10,9 +10,9 @@ $methods = array_keys(_elgg_services()->notifications->getMethods());
 
 	<?php
 	foreach ($methods as $method) {
-		$notification_settings = get_user_notification_settings($user->guid);
+		$notification_settings = $user instanceof ElggUser ? $user->getNotificationSettings() : [];
 
-		$checked = !empty($notification_settings->$method);
+		$checked = !empty($notification_settings[$method]);
 		$checkbox = elgg_view('input/checkbox', array(
 			'name' => "{$method}personal",
 			//'id' => "{$method}checkbox",

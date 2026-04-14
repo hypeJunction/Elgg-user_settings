@@ -23,17 +23,26 @@ class NotificationSettingsTest extends IntegrationTestCase {
     public function down() {
     }
 
+    /**
+     * @return string
+     */
     public function getPluginID(): string {
         return '';
     }
 
+    /**
+     * @return void
+     */
     public function testSetUserNotificationSettingPersists(): void {
         $user = $this->createUser();
 
-        set_user_notification_setting($user->guid, 'email', true);
-        $this->assertTrue((bool) $user->getNotificationSettings()['email'] ?? false);
+        $user->setNotificationSetting('email', true);
+        $this->assertTrue((bool) ($user->getNotificationSettings()['email'] ?? false));
     }
 
+    /**
+     * @return void
+     */
     public function testCollectionPreferencesMetadataPersists(): void {
         $user = $this->createUser();
         $user->collections_notifications_preferences_email = '-1';
@@ -43,6 +52,9 @@ class NotificationSettingsTest extends IntegrationTestCase {
         $this->assertEquals('-1', $loaded->collections_notifications_preferences_email);
     }
 
+    /**
+     * @return void
+     */
     public function testSubscriptionRelationshipCreated(): void {
         $subscriber = $this->createUser();
         $target = $this->createUser();
@@ -51,6 +63,9 @@ class NotificationSettingsTest extends IntegrationTestCase {
         $this->assertTrue($subscriber->hasRelationship($target->guid, 'notifyemail'));
     }
 
+    /**
+     * @return void
+     */
     public function testRemoveEntityRelationshipsClearsSubscriptions(): void {
         $subscriber = $this->createUser();
         $target = $this->createUser();
@@ -62,6 +77,9 @@ class NotificationSettingsTest extends IntegrationTestCase {
         $this->assertFalse($subscriber->hasRelationship($target->guid, 'notifyemail'));
     }
 
+    /**
+     * @return void
+     */
     public function testNonOwnerCannotModifyOtherUserSubscriptions(): void {
         $owner = $this->createUser();
         $other = $this->createUser();
@@ -73,6 +91,9 @@ class NotificationSettingsTest extends IntegrationTestCase {
         elgg_get_session()->removeLoggedInUser();
     }
 
+    /**
+     * @return void
+     */
     public function testOwnerCanModifyOwnSubscriptions(): void {
         $owner = $this->createUser();
 
@@ -81,6 +102,9 @@ class NotificationSettingsTest extends IntegrationTestCase {
         elgg_get_session()->removeLoggedInUser();
     }
 
+    /**
+     * @return void
+     */
     public function testAdminCanModifyOtherUserSubscriptions(): void {
         $owner = $this->createUser();
         $admin = $this->createUser();
