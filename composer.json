@@ -5,7 +5,10 @@
 	"description": "Improved settings pages for Elgg",
 	"homepage": "http://hypejunction.com",
 	"keywords": [
-		"elgg", "plugin", "notifications", "preferences"
+		"elgg",
+		"plugin",
+		"notifications",
+		"preferences"
 	],
 	"license": "GPL-2.0",
 	"authors": [
@@ -23,6 +26,11 @@
 	"config": {
 		"allow-plugins": {
 			"composer/installers": true
+		}
+	},
+	"extra": {
+		"elgg-plugin": {
+			"id": "user_settings"
 		}
 	}
 }
