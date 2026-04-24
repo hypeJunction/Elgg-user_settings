@@ -73,7 +73,7 @@ class NotificationSettingsTest extends IntegrationTestCase {
         $subscriber->addRelationship($target->guid, 'notifyemail');
         $this->assertTrue($subscriber->hasRelationship($target->guid, 'notifyemail'));
 
-        remove_entity_relationships($subscriber->guid, 'notifyemail', false, 'user');
+        $subscriber->removeAllRelationships('notifyemail');
         $this->assertFalse($subscriber->hasRelationship($target->guid, 'notifyemail'));
     }
 
@@ -86,9 +86,9 @@ class NotificationSettingsTest extends IntegrationTestCase {
 
         // Iron law: a non-admin non-owner must not be able to edit the user
         // entity whose notifications settings they're attempting to change.
-        elgg_get_session()->setLoggedInUser($other);
+        _elgg_services()->session_manager->setLoggedInUser($other);
         $this->assertFalse($owner->canEdit($other->guid));
-        elgg_get_session()->removeLoggedInUser();
+        _elgg_services()->session_manager->removeLoggedInUser();
     }
 
     /**
@@ -97,9 +97,9 @@ class NotificationSettingsTest extends IntegrationTestCase {
     public function testOwnerCanModifyOwnSubscriptions(): void {
         $owner = $this->createUser();
 
-        elgg_get_session()->setLoggedInUser($owner);
+        _elgg_services()->session_manager->setLoggedInUser($owner);
         $this->assertTrue($owner->canEdit($owner->guid));
-        elgg_get_session()->removeLoggedInUser();
+        _elgg_services()->session_manager->removeLoggedInUser();
     }
 
     /**
@@ -110,8 +110,8 @@ class NotificationSettingsTest extends IntegrationTestCase {
         $admin = $this->createUser();
         $admin->makeAdmin();
 
-        elgg_get_session()->setLoggedInUser($admin);
+        _elgg_services()->session_manager->setLoggedInUser($admin);
         $this->assertTrue($owner->canEdit($admin->guid));
-        elgg_get_session()->removeLoggedInUser();
+        _elgg_services()->session_manager->removeLoggedInUser();
     }
 }

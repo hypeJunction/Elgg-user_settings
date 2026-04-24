@@ -72,7 +72,7 @@ class PluginRegistrationTest extends IntegrationTestCase {
      */
     public function testNotificationSubscriptionsTableRenders(): void {
         $user = $this->createUser();
-        elgg_get_session()->setLoggedInUser($user);
+        _elgg_services()->session_manager->setLoggedInUser($user);
 
         $output = elgg_view('notifications/subscriptions/personal', [
             'entity' => $user,
@@ -80,7 +80,7 @@ class PluginRegistrationTest extends IntegrationTestCase {
 
         $this->assertIsString($output);
 
-        elgg_get_session()->removeLoggedInUser();
+        _elgg_services()->session_manager->removeLoggedInUser();
     }
 
     /**

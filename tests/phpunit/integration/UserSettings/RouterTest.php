@@ -2,7 +2,7 @@
 
 namespace UserSettings;
 
-use Elgg\HooksRegistrationService\Hook;
+use Elgg\Event;
 use Elgg\IntegrationTestCase;
 
 /**
@@ -31,21 +31,21 @@ class RouterTest extends IntegrationTestCase {
      */
     public function testNotificationsRouteRewritesPersonalForLoggedInUser(): void {
         $user = $this->createUser();
-        elgg_get_session()->setLoggedInUser($user);
+        _elgg_services()->session_manager->setLoggedInUser($user);
 
         $value = [
             'identifier' => 'notifications',
             'segments' => ['personal'],
         ];
 
-        $hook = new Hook(elgg(), 'route', 'notifications', $value, []);
+        $hook = new Event(elgg(),'route', 'notifications', $value, []);
         $result = Router::notificationsRoute($hook);
 
         $this->assertIsArray($result);
         $this->assertEquals('settings', $result['identifier']);
         $this->assertEquals(['notifications', $user->username], $result['segments']);
 
-        elgg_get_session()->removeLoggedInUser();
+        _elgg_services()->session_manager->removeLoggedInUser();
     }
 
     /**
@@ -59,7 +59,7 @@ class RouterTest extends IntegrationTestCase {
             'segments' => ['group', $user->username],
         ];
 
-        $hook = new Hook(elgg(), 'route', 'notifications', $value, []);
+        $hook = new Event(elgg(),'route', 'notifications', $value, []);
         $result = Router::notificationsRoute($hook);
 
         $this->assertIsArray($result);
@@ -72,21 +72,21 @@ class RouterTest extends IntegrationTestCase {
      */
     public function testNotificationsRouteDefaultsToPersonal(): void {
         $user = $this->createUser();
-        elgg_get_session()->setLoggedInUser($user);
+        _elgg_services()->session_manager->setLoggedInUser($user);
 
         $value = [
             'identifier' => 'notifications',
             'segments' => [],
         ];
 
-        $hook = new Hook(elgg(), 'route', 'notifications', $value, []);
+        $hook = new Event(elgg(),'route', 'notifications', $value, []);
         $result = Router::notificationsRoute($hook);
 
         $this->assertIsArray($result);
         $this->assertEquals('settings', $result['identifier']);
         $this->assertEquals('notifications', $result['segments'][0]);
 
-        elgg_get_session()->removeLoggedInUser();
+        _elgg_services()->session_manager->removeLoggedInUser();
     }
 
     /**
@@ -98,7 +98,7 @@ class RouterTest extends IntegrationTestCase {
             'segments' => ['personal'],
         ];
 
-        $hook = new Hook(elgg(), 'route', 'notifications', $value, []);
+        $hook = new Event(elgg(),'route', 'notifications', $value, []);
         $result = Router::notificationsRoute($hook);
 
         $this->assertNull($result);
@@ -115,7 +115,7 @@ class RouterTest extends IntegrationTestCase {
             'segments' => ['unknown_page', $user->username],
         ];
 
-        $hook = new Hook(elgg(), 'route', 'notifications', $value, []);
+        $hook = new Event(elgg(),'route', 'notifications', $value, []);
         $result = Router::notificationsRoute($hook);
 
         // handler only returns for 'personal' or 'group'
@@ -133,7 +133,7 @@ class RouterTest extends IntegrationTestCase {
             'segments' => [$user->username, 'edit'],
         ];
 
-        $hook = new Hook(elgg(), 'route', 'profile', $value, []);
+        $hook = new Event(elgg(),'route', 'profile', $value, []);
         $result = Router::profileRoute($hook);
 
         $this->assertIsArray($result);
@@ -152,7 +152,7 @@ class RouterTest extends IntegrationTestCase {
             'segments' => [$user->username, 'view'],
         ];
 
-        $hook = new Hook(elgg(), 'route', 'profile', $value, []);
+        $hook = new Event(elgg(),'route', 'profile', $value, []);
         $result = Router::profileRoute($hook);
 
         $this->assertNull($result);
@@ -162,7 +162,7 @@ class RouterTest extends IntegrationTestCase {
      * @return void
      */
     public function testProfileRouteIgnoresNonArray(): void {
-        $hook = new Hook(elgg(), 'route', 'profile', false, []);
+        $hook = new Event(elgg(),'route', 'profile', false, []);
         $result = Router::profileRoute($hook);
 
         $this->assertNull($result);
@@ -179,7 +179,7 @@ class RouterTest extends IntegrationTestCase {
             'segments' => ['edit', $user->username],
         ];
 
-        $hook = new Hook(elgg(), 'route', 'avatar', $value, []);
+        $hook = new Event(elgg(),'route', 'avatar', $value, []);
         $result = Router::avatarRoute($hook);
 
         $this->assertIsArray($result);
@@ -198,7 +198,7 @@ class RouterTest extends IntegrationTestCase {
             'segments' => ['view', $user->username],
         ];
 
-        $hook = new Hook(elgg(), 'route', 'avatar', $value, []);
+        $hook = new Event(elgg(),'route', 'avatar', $value, []);
         $result = Router::avatarRoute($hook);
 
         $this->assertNull($result);
@@ -208,7 +208,7 @@ class RouterTest extends IntegrationTestCase {
      * @return void
      */
     public function testAvatarRouteIgnoresNonArray(): void {
-        $hook = new Hook(elgg(), 'route', 'avatar', null, []);
+        $hook = new Event(elgg(),'route', 'avatar', null, []);
         $result = Router::avatarRoute($hook);
 
         $this->assertNull($result);
