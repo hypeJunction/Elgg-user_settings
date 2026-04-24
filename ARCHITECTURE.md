@@ -1,11 +1,11 @@
-# user_settings — Plugin Architecture (Elgg 4.x)
+# user_settings — Plugin Architecture (Elgg 5.x)
 
 ## Summary
 
 Improves the UI/UX of user settings and notification preferences pages by unifying them under a single `/settings/` route. Also rewrites `/notifications/`, `/profile/<name>/edit`, and `/avatar/edit/` routes into the settings layout.
 
 **Plugin ID**: `user_settings`  
-**Version**: `1.2.0`  
+**Version**: `2.0.0`  
 **Category**: notifications
 
 ## Bootstrap
@@ -18,9 +18,9 @@ Improves the UI/UX of user settings and notification preferences pages by unifyi
 |-----------|------|---------------|
 | `settings` | `/settings/{segments}` | `resources/settings` |
 
-## Registered Hooks (4.x `'hooks'` key)
+## Registered Events (5.x `'events'` key)
 
-| Hook name | Type | Handler |
+| Event name | Type | Handler |
 |-----------|------|---------|
 | `route` | `notifications` | `UserSettings\Router::notificationsRoute` |
 | `route` | `profile` | `UserSettings\Router::profileRoute` |
@@ -62,6 +62,39 @@ Improves the UI/UX of user settings and notification preferences pages by unifyi
 |---------|---------|-------------|
 | `show_statistics` | `true` | Show statistics section in user settings |
 | `show_language` | `true` | Show language preference in user settings |
+
+## Migration Notes (4.x → 5.x)
+
+### Hooks merged into events system
+
+| Change | Before (4.x) | After (5.x) |
+|--------|-------------|-------------|
+| `elgg-plugin.php` key | `'hooks'` | `'events'` |
+| Callback type hint | `\Elgg\Hook` | `\Elgg\Event` |
+| Bootstrap unregister | `elgg_unregister_plugin_hook_handler()` | `elgg_unregister_event_handler()` |
+
+### Removed functions (5.x)
+
+| Removed (4.x) | Replacement (5.x) |
+|--------------|-------------------|
+| `get_user_by_username()` | `elgg_get_user_by_username()` |
+| `remove_entity_relationships()` | `$entity->removeAllRelationships($relationship)` |
+| `ElggSession::setLoggedInUser()` | `_elgg_services()->session_manager->setLoggedInUser()` |
+| `Elgg\HooksRegistrationService\Hook` | `Elgg\Event` (class removed, use base Event) |
+
+### Test adaptations
+
+`\Elgg\HooksRegistrationService\Hook` class was removed. Use `\Elgg\Event` instead:
+```php
+use Elgg\Event;
+$event = new Event(elgg(), 'route', 'notifications', $value, []);
+```
+
+Session management in tests moved to `session_manager` service:
+```php
+_elgg_services()->session_manager->setLoggedInUser($user);
+_elgg_services()->session_manager->removeLoggedInUser();
+```
 
 ## Migration Notes (3.x → 4.x)
 

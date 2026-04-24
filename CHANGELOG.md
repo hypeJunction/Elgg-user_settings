@@ -1,3 +1,15 @@
+<a name="2.0.0"></a>
+# [2.0.0] - 2026-04-24
+
+### Migration: Elgg 5.x
+
+* **elgg-plugin.php**: `'hooks'` key renamed to `'events'` (hooks and events merged in 5.x)
+* **Router.php**: `\Elgg\Hook` → `\Elgg\Event`, `get_user_by_username()` → `elgg_get_user_by_username()`
+* **Bootstrap.php**: `elgg_unregister_plugin_hook_handler()` → `elgg_unregister_event_handler()`
+* **composer.json**: `php >=8.2`, `elgg/elgg ^5.0`, version `2.0.0`
+* **Docker stack**: PHP 8.2, MySQL 8.0, Elgg 5.1.x, Playwright v1.59.1, `ELGG_SITE_URL=http://elgg/`
+* **Tests**: `Elgg\HooksRegistrationService\Hook` → `Elgg\Event`; session management via `session_manager` service; `remove_entity_relationships()` → `removeAllRelationships()`
+
 <a name="1.2.0"></a>
 # [1.2.0] - 2026-04-14
 
