@@ -7,11 +7,11 @@ class Router {
 	/**
 	 * Routes notifications pages to the user settings pages
 	 *
-	 * @param \Elgg\Hook $hook "route", "notifications"
+	 * @param \Elgg\Event $event "route", "notifications"
 	 * @return array|void
 	 */
-	public static function notificationsRoute(\Elgg\Hook $hook) {
-		$return = $hook->getValue();
+	public static function notificationsRoute(\Elgg\Event $event) {
+		$return = $event->getValue();
 
 		$identifier = \elgg_extract('identifier', $return);
 		$segments = (array) \elgg_extract('segments', $return, []);
@@ -30,7 +30,7 @@ class Router {
 		if (!$username) {
 			$user = \elgg_get_logged_in_user_entity();
 		} else {
-			$user = \get_user_by_username($username);
+			$user = \elgg_get_user_by_username($username);
 		}
 
 		if (in_array($page, ['personal', 'group'])) {
@@ -44,11 +44,11 @@ class Router {
 	/**
 	 * Route profile edit page
 	 *
-	 * @param \Elgg\Hook $hook "route", "profile"
+	 * @param \Elgg\Event $event "route", "profile"
 	 * @return array|void
 	 */
-	public static function profileRoute(\Elgg\Hook $hook) {
-		$return = $hook->getValue();
+	public static function profileRoute(\Elgg\Event $event) {
+		$return = $event->getValue();
 
 		if (!is_array($return)) {
 			return;
@@ -71,11 +71,11 @@ class Router {
 	/**
 	 * Route avatar edit page
 	 *
-	 * @param \Elgg\Hook $hook "route", "avatar"
+	 * @param \Elgg\Event $event "route", "avatar"
 	 * @return array|void
 	 */
-	public static function avatarRoute(\Elgg\Hook $hook) {
-		$return = $hook->getValue();
+	public static function avatarRoute(\Elgg\Event $event) {
+		$return = $event->getValue();
 
 		if (!is_array($return)) {
 			return;

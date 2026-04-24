@@ -1,6 +1,6 @@
 {
 	"name": "hypejunction/user_settings",
-	"version": "1.1.2",
+	"version": "2.0.0",
 	"type": "elgg-plugin",
 	"description": "Improved settings pages for Elgg",
 	"homepage": "http://hypejunction.com",
@@ -18,8 +18,8 @@
 		}
 	],
 	"require": {
-		"php": ">=7.4",
-		"elgg/elgg": "^4.0",
+		"php": ">=8.2",
+		"elgg/elgg": "^5.0",
 		"composer/installers": "^2.0",
 		"hypejunction/forms_api": "~1.0"
 	},

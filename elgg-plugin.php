@@ -29,7 +29,7 @@ return [
 		],
 	],
 
-	'hooks' => [
+	'events' => [
 		'route' => [
 			'notifications' => [
 				\UserSettings\Router::class . '::notificationsRoute' => [],
