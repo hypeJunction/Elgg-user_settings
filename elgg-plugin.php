@@ -4,7 +4,7 @@ return [
 	'plugin' => [
 		'id' => 'user_settings',
 		'name' => 'User Settings',
-		'version' => '1.2.0',
+		'version' => '1.4.0',
 		'description' => 'Improves UI/UX of user settings and notification preferences pages.',
 		'author' => 'Ismayil Khayredinov',
 		'category' => 'notifications',
