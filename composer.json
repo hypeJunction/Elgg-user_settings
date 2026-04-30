@@ -1,6 +1,6 @@
 {
 	"name": "hypejunction/user_settings",
-	"version": "1.3.0",
+	"version": "2.0.0",
 	"type": "elgg-plugin",
 	"description": "Improved settings pages for Elgg",
 	"homepage": "http://hypejunction.com",
