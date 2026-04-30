@@ -1,4 +1,4 @@
-# user_settings — Plugin Architecture (Elgg 6.x)
+# user_settings — Plugin Architecture (Elgg 7.x)
 
 ## Summary
 
@@ -18,7 +18,7 @@ Improves the UI/UX of user settings and notification preferences pages by unifyi
 |-----------|------|---------------|
 | `settings` | `/settings/{segments}` | `resources/settings` |
 
-## Registered Events (5.x `'events'` key)
+## Registered Events (`'events'` key, 5.x+)
 
 | Event name | Type | Handler |
 |-----------|------|---------|
@@ -62,6 +62,35 @@ Improves the UI/UX of user settings and notification preferences pages by unifyi
 |---------|---------|-------------|
 | `show_statistics` | `true` | Show statistics section in user settings |
 | `show_language` | `true` | Show language preference in user settings |
+
+## Migration Notes (6.x → 7.x)
+
+### No code changes required
+
+The plugin's public surface (route events, settings actions, view extensions) is
+stable across the 6→7 boundary. All 23 LLM-guided rules in
+`rules/6x-to-7x/manifest.json` were inspected; none applied to user_settings:
+
+| 7.x change | Why N/A here |
+|------------|--------------|
+| ElggObject is abstract | Plugin registers no entities |
+| CSS Crush removed | Sole CSS file uses no `$(...)` syntax |
+| Memcached/Redis backends removed | Plugin doesn't configure caches |
+| Laminas\Mail → Symfony Mailer | Plugin sends no email |
+| Notification handler class moves | Plugin uses no notification handlers |
+| Font Awesome v7 rename | Plugin renders no FA icons in its own views |
+| `elgg_register_notification_event` signature change | Not used |
+| Form/action renames | Plugin's actions unchanged in 7.x |
+
+### Docker stack
+
+`docker/elgg7/` mirrors `docker/elgg6/` with bumps:
+- PHP 8.3 (was 8.2)
+- `elgg/elgg: ~7.0.0` (dev stability — 7.x is bleeding edge as of writing)
+- Install script uses `_elgg_services()->systemCache->clear()` instead of the
+  removed `elgg_reset_system_cache()`
+- 16+ char passwords (admin & testuser) for the 7.x minimum-length policy
+- Ports 8880/3704 (avoiding collision with elgg6's 8580/3404)
 
 ## Migration Notes (4.x → 5.x)
 
