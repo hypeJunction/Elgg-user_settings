@@ -5,7 +5,7 @@
 Improves the UI/UX of user settings and notification preferences pages by unifying them under a single `/settings/` route. Also rewrites `/notifications/`, `/profile/<name>/edit`, and `/avatar/edit/` routes into the settings layout.
 
 **Plugin ID**: `user_settings`  
-**Version**: `2.0.0`  
+**Version**: `2.2.0`  
 **Category**: notifications
 
 ## Bootstrap

@@ -3,20 +3,28 @@
 
 ### Migration: Elgg 7.x
 
-* **composer.json**: `php >=8.3`, `elgg/elgg ~7.0.0`, added `ext-intl: *`
-* **No code changes**: plugin's public APIs (route events, view extensions,
-  settings actions) are unaffected by 7.x breaking changes (ElggObject
-  abstract, CSS Crush removal, Symfony Mailer, notification handler renames,
-  Font Awesome v7) — none apply to user_settings
-* **Docker stack**: added `docker/elgg7/` (PHP 8.3, MySQL 8.0, Elgg ~7.0.0
-  dev-stability, PHPUnit ^11). Install script uses
+* **composer.json**: `php >=8.3`, `elgg/elgg ~7.0.0`, added `ext-intl: *`,
+  `minimum-stability: dev` + `prefer-stable: true` (7.0 still RC), and
+  asset-packagist repository (Elgg 7.x pulls `npm-asset/ckeditor5`).
+  Removed stale `hypejunction/forms_api` require (dropped at 4.x; never
+  re-listed in source)
+* **No source-code changes**: plugin's public APIs (route events, view
+  extensions, settings action) are unaffected by 7.x breaking changes
+  (ElggObject abstract, CSS Crush removal, Symfony Mailer, notification
+  handler renames, Font Awesome v7 — `fa-angle-right`/`fa-angle-down`
+  retained). None apply to user_settings.
+* **Docker stack**: added `docker/elgg7/` (PHP 8.3, MySQL 8.0, Elgg
+  `7.0.0-rc.1`, PHPUnit `^11`). Install script uses
   `_elgg_services()->systemCache->clear()` (replaces removed
   `elgg_reset_system_cache()`); admin & testuser passwords ≥16 chars for
-  7.x's enforced minimum length
-* **Verification**: 23 PHPUnit tests / 166 assertions pass on Elgg 7.x with
-  zero adaptation; PHP syntax clean; homepage/login render; no Apache PHP
-  errors; security sweep clean; post-migration verifier finds no
-  future-version API leakage
+  7.x's enforced minimum
+* **Test bootstrap**: dropped the `$pluginRoot/vendor/autoload.php` load —
+  the plugin's local copy of `elgg/elgg` was shadowing the engine and made
+  `Paths::project()` resolve to the plugin dir, so `plugins_path` doubled
+  to `mod/user_settings/mod/`. Engine deps from `/var/www/html/vendor`
+  alone are sufficient
+* **Verification**: 23/23 integration tests pass (166 assertions) on Elgg
+  7.x with zero adaptation
 
 <a name="2.1.0"></a>
 # [2.1.0] - 2026-04-30

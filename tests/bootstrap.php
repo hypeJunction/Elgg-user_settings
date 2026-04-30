@@ -18,10 +18,4 @@ spl_autoload_register(function ($class) use ($testClassesDir) {
     }
 });
 
-// Load plugin autoloader if present
-$pluginRoot = dirname(__DIR__);
-if (file_exists($pluginRoot . '/vendor/autoload.php')) {
-    require_once $pluginRoot . '/vendor/autoload.php';
-}
-
 \Elgg\Application::loadCore();
