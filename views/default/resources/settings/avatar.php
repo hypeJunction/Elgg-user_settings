@@ -18,7 +18,7 @@ $title = elgg_echo('user:settings:avatar');
 $content = elgg_view('core/avatar/upload', array('entity' => $entity));
 
 // only offer the crop view if an avatar has been uploaded
-if (isset($entity->icontime)) {
+if ($entity->hasIcon('small')) {
 	$content .= elgg_view('core/avatar/crop', array('entity' => $entity));
 }
 
