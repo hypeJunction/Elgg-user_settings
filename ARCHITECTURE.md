@@ -1,4 +1,4 @@
-# user_settings — Plugin Architecture (Elgg 5.x)
+# user_settings — Plugin Architecture (Elgg 6.x)
 
 ## Summary
 

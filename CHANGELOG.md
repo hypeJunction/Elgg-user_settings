@@ -1,3 +1,13 @@
+<a name="2.1.0"></a>
+# [2.1.0] - 2026-04-30
+
+### Migration: Elgg 6.x
+
+* **composer.json**: `elgg/elgg ^6.0`
+* **collections.js**: AMD `define(function(require){...})` → ES module `import $ from 'jquery'`
+* **resources/settings/avatar.php**: `isset($entity->icontime)` → `$entity->hasIcon('small')` (`icontime` metadata removed in 6.x)
+* **Docker stack**: added `docker/elgg6/` stack (PHP 8.2, MySQL 8.0, Elgg 6.x, PHPUnit ^10)
+
 <a name="2.0.0"></a>
 # [2.0.0] - 2026-04-24
 
