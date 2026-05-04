@@ -60,10 +60,9 @@ jobs:
 
       - name: Install PHPUnit
         run: |
-          # Elgg 3.x/4.x → PHP 7.4 → PHPUnit 9.x
-          # Elgg 5.x+    → PHP 8.1+ → PHPUnit 10.x (override below if needed)
+          # Elgg 7.x → PHP 8.3 → PHPUnit 10.x/11.x
           docker compose -f docker/docker-compose.yml exec -T elgg \
-            composer require --dev phpunit/phpunit:^9.6 --no-interaction
+            composer require --dev "phpunit/phpunit:^10.5 || ^11.0" --no-interaction
 
       - name: Create test DB tables
         run: |
@@ -76,7 +75,9 @@ jobs:
               $r = $pdo->query("SHOW CREATE TABLE $t")->fetch(PDO::FETCH_ASSOC);
               $pdo->exec(str_replace($t, $new, $r["Create Table"]));
           }
+          $existing = $pdo->query("SHOW TABLES LIKE \"elgg_%\"")->fetchAll(PDO::FETCH_COLUMN);
           foreach (["config","entities","metadata","private_settings","entity_relationships"] as $t) {
+              if (!in_array("elgg_$t", $existing)) { continue; }
               $pdo->exec("INSERT INTO c_i_elgg_$t SELECT * FROM elgg_$t");
           }
           echo "Test tables ready." . PHP_EOL;

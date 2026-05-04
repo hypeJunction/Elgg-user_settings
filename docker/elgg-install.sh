@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-# Per-plugin Elgg 5.x install + activation script.
+# Per-plugin Elgg 7.x install + activation script.
 # PLUGIN_ID must be set in the container environment (passed by docker-compose
 # from <plugin>/docker/.env). Only that one plugin is activated — no fleet
 # activation, no plugin-order.txt, no cross-plugin side effects.
@@ -21,7 +21,7 @@ echo "MySQL is ready."
 cd /var/www/html
 
 if [ ! -f /var/www/html/.elgg-installed ]; then
-    echo "Installing Elgg 5.x..."
+    echo "Installing Elgg 7.x..."
 
     mkdir -p elgg-config
     cat > elgg-config/settings.php <<'SETTINGS_TEMPLATE'
@@ -41,7 +41,7 @@ SETTINGS_TEMPLATE
 \$CONFIG->dbprefix = 'elgg_';
 \$CONFIG->dbencoding = 'utf8mb4';
 \$CONFIG->dataroot = '${ELGG_DATA_ROOT:-/var/www/data/}';
-\$CONFIG->wwwroot = '${ELGG_SITE_URL:-http://localhost:8480/}';
+\$CONFIG->wwwroot = '${ELGG_SITE_URL:-http://localhost:8880/}';
 \$CONFIG->cacheroot = '${ELGG_DATA_ROOT:-/var/www/data/}cache/';
 \$CONFIG->assetroot = '${ELGG_DATA_ROOT:-/var/www/data/}assets/';
 SETTINGS_VALUES
@@ -56,19 +56,19 @@ SETTINGS_VALUES
             'dbhost' => '${ELGG_DB_HOST:-db}',
             'dbport' => '3306',
             'dbprefix' => 'elgg_',
-            'sitename' => 'Elgg 5.x Plugin Test',
+            'sitename' => 'Elgg 7.x Plugin Test',
             'siteemail' => '${ELGG_ADMIN_EMAIL:-admin@example.com}',
-            'wwwroot' => '${ELGG_SITE_URL:-http://localhost:8480/}',
+            'wwwroot' => '${ELGG_SITE_URL:-http://localhost:8880/}',
             'dataroot' => '${ELGG_DATA_ROOT:-/var/www/data/}',
             'displayname' => 'Admin',
             'email' => '${ELGG_ADMIN_EMAIL:-admin@example.com}',
             'username' => 'admin',
-            'password' => '${ELGG_ADMIN_PASSWORD:-admin12345}',
+            'password' => '${ELGG_ADMIN_PASSWORD:-AdminPassword123456}',
         ];
 
         \$installer = new \ElggInstaller();
         \$installer->batchInstall(\$params);
-        echo 'Elgg 5.x installed successfully.' . PHP_EOL;
+        echo 'Elgg 7.x installed successfully.' . PHP_EOL;
     " 2>&1 || echo "Install completed (check for errors above)."
 
     echo "Activating plugins..."
@@ -79,27 +79,12 @@ SETTINGS_VALUES
         _elgg_services()->plugins->generateEntities();
 
         // Resolve dep plugin IDs from the plugin's own metadata.
-        // Priority: elgg-plugin.php 'plugin.dependencies' (Elgg 5.x) then manifest.xml <requires type='plugin'>.
-        // IDs are lowercased to match mod/ directory names.
-        // Deps not present in mod/ are skipped with a warning — this naturally excludes
-        // deps that are unsafe to activate (e.g. unmigrated plugins not volume-mounted).
         \$dep_ids = [];
         \$plugin_file = '/var/www/html/mod/${PLUGIN_ID}/elgg-plugin.php';
         if (file_exists(\$plugin_file)) {
             \$manifest = include \$plugin_file;
             foreach (array_keys(\$manifest['plugin']['dependencies'] ?? []) as \$id) {
                 \$dep_ids[] = strtolower(\$id);
-            }
-        }
-        if (empty(\$dep_ids)) {
-            \$xml_file = '/var/www/html/mod/${PLUGIN_ID}/manifest.xml';
-            if (file_exists(\$xml_file)) {
-                \$xml = simplexml_load_file(\$xml_file);
-                foreach (\$xml->requires ?? [] as \$req) {
-                    if ((string)\$req->type === 'plugin') {
-                        \$dep_ids[] = strtolower((string)\$req->name);
-                    }
-                }
             }
         }
 
@@ -139,8 +124,8 @@ SETTINGS_VALUES
                 exit(1);
             }
         }
-        elgg_reset_system_cache();
-        echo 'System cache reset.' . PHP_EOL;
+        _elgg_services()->systemCache->clear();
+        echo 'System cache cleared.' . PHP_EOL;
     " 2>&1 || echo "Plugin activation completed (check for errors above)."
 
     # Create a test user for Playwright tests
@@ -148,13 +133,13 @@ SETTINGS_VALUES
         require_once 'vendor/autoload.php';
         \$app = Elgg\Application::getInstance();
         \$app->bootCore();
-        if (!get_user_by_username('testuser')) {
+        if (!elgg_get_user_by_username('testuser')) {
             \$user = new ElggUser();
             \$user->username = 'testuser';
             \$user->email = 'testuser@example.com';
             \$user->name = 'Test User';
             \$user->access_id = ACCESS_PUBLIC;
-            \$user->setPassword('testuser12345');
+            \$user->setPassword('TestUserPassword123456');
             if (\$user->save()) {
                 \$user->validated = 1;
                 \$user->validated_method = 'admin';
@@ -165,7 +150,7 @@ SETTINGS_VALUES
     " 2>&1
 
     touch /var/www/html/.elgg-installed
-    echo "Elgg 5.x setup complete."
+    echo "Elgg 7.x setup complete."
 fi
 
 echo "Starting Apache..."
