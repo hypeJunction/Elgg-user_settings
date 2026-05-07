@@ -27,16 +27,16 @@ if (elgg_get_plugin_setting('show_statistics', 'user_settings')) {
 }
 
 foreach ($tabs as $tab => $url) {
-	elgg_register_menu_item('filter', array(
+	elgg_register_menu_item('filter', [
 		'name' => "user:settings:$tab",
 		'text' => elgg_echo("user:settings:$tab"),
 		'href' => elgg_normalize_url($url),
 		'selected' => $tab == $filter_context,
-	));
+	]);
 }
 
-echo elgg_view_menu('filter', array(
+echo elgg_view_menu('filter', [
 	'sort_by' => 'priority',
 	'entity' => $entity,
 	'filter_context' => $filter_context,
-));
+]);

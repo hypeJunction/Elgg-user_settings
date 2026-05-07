@@ -4,6 +4,9 @@ namespace UserSettings;
 
 use Elgg\DefaultPluginBootstrap;
 
+/**
+ * Bootstrap class.
+ */
 class Bootstrap extends DefaultPluginBootstrap {
 
 	/**

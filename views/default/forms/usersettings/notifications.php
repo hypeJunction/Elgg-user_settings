@@ -12,11 +12,11 @@ if (elgg_is_active_plugin('groups')) {
 	echo elgg_view('notifications/subscriptions/groups', $vars);
 }
 
-echo elgg_view_input('hidden', array(
+echo elgg_view_input('hidden', [
 	'name' => 'guid',
 	'value' => $user->guid
-));
-echo elgg_view_input('submit', array(
+]);
+echo elgg_view_input('submit', [
 	'value' => elgg_echo('save'),
 	'field_class' => 'elgg-foot',
-));
+]);

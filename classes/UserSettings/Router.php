@@ -2,6 +2,9 @@
 
 namespace UserSettings;
 
+/**
+ * Router class.
+ */
 class Router {
 
 	/**

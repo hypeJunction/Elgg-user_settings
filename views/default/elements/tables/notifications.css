@@ -1,5 +1,5 @@
 .elgg-subscriptions-table {
-    width: 100%;
+	width: 100%;
 }
 
 .elgg-subscriptions-table td, .elgg-subscriptions-table th {
@@ -9,18 +9,18 @@
 }
 
 .elgg-subscriptions-table .elgg-subscriptions-type-label {
-    max-width: 250px;
+	max-width: 250px;
 	padding: 6px;
 	text-align: left;
 }
 
 .elgg-subscriptions-table .elgg-subscriptions-toggle-cell {
 	max-width: 50px;
-    padding: 6px;
+	padding: 6px;
 }
 
 .elgg-subscriptions-table tr {
-    border-bottom: 1px solid #dcdcdc;
+	border-bottom: 1px solid #dcdcdc;
 }
 
 .elgg-subscriptions-table input {
@@ -36,5 +36,5 @@
 	background: #f4f4f4;
 }
 .elgg-subscriptions-table .elgg-subscriptions-collection-member .elgg-subscriptions-type-label {
-    padding-left: 25px;
+	padding-left: 25px;
 }

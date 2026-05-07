@@ -9,15 +9,17 @@
 $current_user = elgg_get_logged_in_user_entity();
 
 $guid = (int) get_input('guid', 0);
-if (!$guid || !($user = get_entity($guid))) {
+$user = $guid ? get_entity($guid) : null;
+if (!$user) {
 	return elgg_error_response();
 }
+
 if (($user->guid != $current_user->guid) && !$current_user->isAdmin()) {
 	return elgg_error_response();
 }
 
 $NOTIFICATION_HANDLERS = _elgg_services()->notifications->getMethods();
-$subscriptions = array();
+$subscriptions = [];
 foreach ($NOTIFICATION_HANDLERS as $method => $foo) {
 	$personal[$method] = get_input($method.'personal');
 	$user->setNotificationSetting($method, ($personal[$method] == '1') ? true : false);
