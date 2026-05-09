@@ -1,5 +1,5 @@
 <?php
 
-echo elgg_view_form('usersettings/save', array(
+echo elgg_view_form('usersettings/save', [
 	'validate' => true,
-		), $vars);
+], $vars);

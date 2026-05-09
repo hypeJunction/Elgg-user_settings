@@ -11,3 +11,9 @@ robots.txt
 /vendor/
 composer.lock
 Gemfile.lock
+docker/.env
+docker/elgg*/.env
+tests/.phpunit.result.cache
+tests/playwright/node_modules/
+tests/playwright/test-results/
+tests/playwright/playwright-report/

@@ -9,18 +9,20 @@
 $current_user = elgg_get_logged_in_user_entity();
 
 $guid = (int) get_input('guid', 0);
-if (!$guid || !($user = get_entity($guid))) {
-	forward();
-}
-if (($user->guid != $current_user->guid) && !$current_user->isAdmin()) {
-	forward();
+$user = $guid ? get_entity($guid) : null;
+if (!$user) {
+	return elgg_error_response();
 }
 
-$NOTIFICATION_HANDLERS = _elgg_services()->notifications->getMethodsAsDeprecatedGlobal();
-$subscriptions = array();
+if (($user->guid != $current_user->guid) && !$current_user->isAdmin()) {
+	return elgg_error_response();
+}
+
+$NOTIFICATION_HANDLERS = _elgg_services()->notifications->getMethods();
+$subscriptions = [];
 foreach ($NOTIFICATION_HANDLERS as $method => $foo) {
 	$personal[$method] = get_input($method.'personal');
-	set_user_notification_setting($user->guid, $method, ($personal[$method] == '1') ? true : false);
+	$user->setNotificationSetting($method, ($personal[$method] == '1') ? true : false);
 
 	$collections[$method] = get_input($method.'collections');
 	$metaname = 'collections_notifications_preferences_' . $method;
@@ -35,11 +37,9 @@ foreach ($NOTIFICATION_HANDLERS as $method => $foo) {
 foreach ($subscriptions as $method => $subscription) {
 	if (is_array($subscription) && !empty($subscription)) {
 		foreach ($subscription as $subscriptionperson) {
-			elgg_add_subscription($user->guid, $method, $subscriptionperson);
+			$user->addRelationship($subscriptionperson, 'notify' . $method);
 		}
 	}
 }
 
-system_message(elgg_echo('notifications:subscriptions:success'));
-
-forward(REFERER);
+return elgg_ok_response('', elgg_echo('notifications:subscriptions:success'));

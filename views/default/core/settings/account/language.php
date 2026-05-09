@@ -7,11 +7,11 @@ if (!$user instanceof ElggUser) {
 }
 
 $title = elgg_echo('user:set:language');
-$content = elgg_view_input('select', array(
+$content = elgg_view_input('select', [
 	'name' => 'language',
 	'value' => $user->language,
-	'options_values' => get_installed_translations(),
+	'options_values' => elgg()->translator->getInstalledTranslations(),
 	'label' => elgg_echo('user:language:label'),
-		));
+]);
 
 echo elgg_view_module('info', $title, $content);

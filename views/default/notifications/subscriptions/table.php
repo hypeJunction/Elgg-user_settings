@@ -9,7 +9,7 @@ $methods = array_keys(_elgg_services()->notifications->getMethods());
 				foreach ($methods as $method) {
 					echo elgg_format_element('th', [
 						'class' => $method ? "{$method}togglefield elgg-subscriptions-toggle-cell" : 'elgg-subscriptions-toggle-cell',
-							], elgg_echo("notification:method:$method"));
+					], elgg_echo("notification:method:$method"));
 				}
 				?>
 			<th>&nbsp;</th>

@@ -6,37 +6,38 @@ if (!$user instanceof ElggUser) {
 
 $methods = array_keys(_elgg_services()->notifications->getMethods());
 
-$dbprefix = elgg_get_config('dbprefix');
-$groups = new ElggBatch('elgg_get_entities', array(
-	'selects' => array('GROUP_CONCAT(ers.relationship) as relationships'),
+// Fetch all groups the user is a member of
+$groups = elgg_get_entities([
 	'types' => 'group',
 	'limit' => 0,
-	'joins' => array(
-		"JOIN {$dbprefix}groups_entity ge ON e.guid = ge.guid",
-		"JOIN {$dbprefix}entity_relationships ers ON e.guid = ers.guid_two AND ers.guid_one = $user->guid",
-	),
-	'wheres' => array(
-		"ers.relationship = 'member' OR ers.relationship LIKE 'notify%'"
-	),
-	'group_by' => 'e.guid',
-	'order_by' => 'ge.name',
-		));
+	'relationship' => 'member',
+	'relationship_guid' => $user->guid,
+	'inverse_relationship' => false,
+	'sort_by' => [
+		'property' => 'name',
+		'direction' => 'ASC',
+	],
+]);
 
-$groups_list = array();
+$groups_list = [];
 foreach ($groups as $group) {
-	$icon = elgg_view_entity_icon($group, 'tiny', array(
+	$icon = elgg_view_entity_icon($group, 'tiny', [
 		'use_link' => false,
-	));
-	$name = $group->name;
-	$relationships = array();
-	$relationships_concat = $group->getVolatileData('select:relationships');
-	if ($relationships_concat) {
-		$relationships = explode(',', $relationships_concat);
+	]);
+	$name = $group->getDisplayName();
+
+	// Check notification relationships for each method
+	$relationships = [];
+	foreach ($methods as $method) {
+		if (check_entity_relationship($user->guid, "notify{$method}", $group->guid)) {
+			$relationships[] = "notify{$method}";
+		}
 	}
-	$groups_list[$group->guid] = array(
+
+	$groups_list[$group->guid] = [
 		'view' => elgg_view_image_block($icon, $name),
 		'relationships' => $relationships,
-	);
+	];
 }
 
 if (empty($groups_list)) {
@@ -55,29 +56,26 @@ foreach ($groups_list as $group_guid => $group_data) {
 		<?php
 		foreach ($methods as $method) {
 			$checked = in_array("notify{$method}", $group_data['relationships']);
-			$checkbox = elgg_view('input/checkbox', array(
+			$checkbox = elgg_view('input/checkbox', [
 				'name' => "{$method}subscriptions[]",
-				//'id' => "{$method}checkbox",
-				//'onclick' => "adjust{$method}('{$method}{$group_guid}')",
 				'value' => $group_guid,
 				'default' => false,
 				'checked' => $checked,
 				'class' => 'elgg-subscriptions-toggle',
 				'data-method' => $method,
 				'data-guid' => $group_guid,
-			));
+			]);
 
-			$link = elgg_view('output/url', array(
-				//'id' => "{$method}{$group_guid}",
+			$link = elgg_view('output/url', [
 				'class' => $checked ? "{$method}toggleOn elgg-state-active" : "{$method}toggleOff elgg-state-inactive",
-				//'onclick' => "adjust{$method}_alt('{$method}{$group_guid}');",
 				'text' => $checkbox,
 				'href' => false,
-			));
+			]);
 
 			echo elgg_format_element('td', ['class' => "{$method}togglefield elgg-subscriptions-toggle-cell"], $link);
 		}
-		echo elgg_format_element('td', [], "&nbsp;");
+
+		echo elgg_format_element('td', [], '&nbsp;');
 		?>
 	</tr>
 	<?php
