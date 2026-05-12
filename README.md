@@ -12,12 +12,13 @@ User Settings for Elgg
  * Removes all the spaghetti code and friendspicker from notifications forms
 
 ![User Settings](https://raw.github.com/hypeJunction/Elgg-user_settings/master/screenshots/settings.png "User Settings Pages")
+
 ## Compatibility
 
 | Plugin version | Elgg version |
 |---|---|
-| 7.0.0 | 7.x |
-| 6.0.0 | 6.x |
-| 5.0.0 | 5.x |
-| 4.0.0 | 4.x |
-| 3.0.0 | 3.x |
+| 7.0.0   | 7.x  |
+| 6.0.0   | 6.x  |
+| 5.0.0   | 5.x  |
+| 4.0.0   | 4.x  |
+| 3.0.0   | 3.x  |
