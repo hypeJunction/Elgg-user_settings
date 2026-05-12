@@ -5,7 +5,7 @@ return [
 		'id' => 'user_settings',
 		'name' => 'User Settings',
 		'version' => '7.0.0',
-		'description' => 'Improves UI/UX of user settings and notification preferences pages.',
+		'description' => 'Improved settings pages for Elgg',
 		'author' => 'Ismayil Khayredinov',
 		'category' => 'notifications',
 	],
