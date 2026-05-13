@@ -21,7 +21,7 @@
         "php": ">=8.2",
         "elgg/elgg": "^5.0",
         "composer/installers": "^2.0",
-        "hypejunction/forms_api": "~1.0"
+        "hypejunction/forms_api": "^5.0"
     },
     "config": {
         "allow-plugins": {
