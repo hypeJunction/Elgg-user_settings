@@ -1,34 +1,34 @@
 {
-	"name": "hypejunction/user_settings",
-	"version": "1.1.2",
-	"type": "elgg-plugin",
-	"description": "Improved settings pages for Elgg",
-	"homepage": "http://hypejunction.com",
-	"keywords": [
-		"elgg",
-		"plugin",
-		"notifications",
-		"preferences"
-	],
-	"license": "GPL-2.0",
-	"authors": [
-		{
-			"name": "Ismayil Khayredinov",
-			"email": "info@hypejunction.com"
-		}
-	],
-	"require": {
-		"composer/installers": "^1.0 || ^2.0",
-		"php": ">=7.2",
-		"elgg/elgg": "^3.0",
-		"hypejunction/forms_api": "~1.0"
-	},
-	"config": {
-		"allow-plugins": {
-			"composer/installers": true
-		}
-	},
-	"require-dev": {
-		"phpunit/phpunit": "^9.6"
-	}
+    "name": "hypejunction/user_settings",
+    "version": "3.0.0",
+    "type": "elgg-plugin",
+    "description": "Improved settings pages for Elgg",
+    "homepage": "http://hypejunction.com",
+    "keywords": [
+        "elgg",
+        "plugin",
+        "notifications",
+        "preferences"
+    ],
+    "license": "GPL-2.0",
+    "authors": [
+        {
+            "name": "Ismayil Khayredinov",
+            "email": "info@hypejunction.com"
+        }
+    ],
+    "require": {
+        "composer/installers": "^1.0 || ^2.0",
+        "php": ">=7.2",
+        "elgg/elgg": "^3.0",
+        "hypejunction/forms_api": "~1.0"
+    },
+    "config": {
+        "allow-plugins": {
+            "composer/installers": true
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.6"
+    }
 }
