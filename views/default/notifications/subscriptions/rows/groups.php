@@ -29,7 +29,7 @@ foreach ($groups as $group) {
 	// Check notification relationships for each method
 	$relationships = [];
 	foreach ($methods as $method) {
-		if (check_entity_relationship($user->guid, "notify{$method}", $group->guid)) {
+		if ((get_entity($user->guid)?->hasRelationship($group->guid, "notify{$method}") ?? false)) {
 			$relationships[] = "notify{$method}";
 		}
 	}
