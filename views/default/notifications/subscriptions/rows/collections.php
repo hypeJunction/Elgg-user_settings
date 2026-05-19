@@ -41,7 +41,7 @@ foreach ($subscriptions as $subscription) {
 	// Check notification relationships for each method
 	$relationships = [];
 	foreach ($methods as $method) {
-		if ((get_entity($user->guid)?->hasRelationship($subscription->guid, "notify{$method}") ?? false)) {
+		if ((get_entity($user->guid)?->getRelationship($subscription->guid, "notify{$method}") ?? null)) {
 			$relationships[] = "notify{$method}";
 		}
 	}
@@ -170,7 +170,7 @@ foreach ($collections as $collection) {
 			$name = $member->getDisplayName();
 			$relationships = [];
 			foreach ($methods as $method) {
-				if ((get_entity($user->guid)?->hasRelationship($member->guid, "notify{$method}") ?? false)) {
+				if ((get_entity($user->guid)?->getRelationship($member->guid, "notify{$method}") ?? null)) {
 					$relationships[] = "notify{$method}";
 				}
 			}
