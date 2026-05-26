@@ -28,7 +28,7 @@ class PluginRegistrationTest extends IntegrationTestCase {
      * @return void
      */
     public function testNotificationSettingsSaveActionIsRegistered(): void {
-        $actions = _elgg_services()->actions->getAllActions();
+        $actions = \_elgg_services()->actions->getAllActions();
         $this->assertArrayHasKey('notificationsettings/save', $actions);
     }
 
@@ -36,7 +36,7 @@ class PluginRegistrationTest extends IntegrationTestCase {
      * @return void
      */
     public function testSettingsRouteIsRegistered(): void {
-        $routes = _elgg_services()->routes->all();
+        $routes = \_elgg_services()->routes->all();
         $this->assertArrayHasKey('settings', $routes);
     }
 
@@ -63,7 +63,7 @@ class PluginRegistrationTest extends IntegrationTestCase {
         ];
 
         foreach ($views as $view) {
-            $this->assertTrue(elgg_view_exists($view), "View $view should exist");
+            $this->assertTrue(\elgg_view_exists($view), "View $view should exist");
         }
     }
 
@@ -72,27 +72,27 @@ class PluginRegistrationTest extends IntegrationTestCase {
      */
     public function testNotificationSubscriptionsTableRenders(): void {
         $user = $this->createUser();
-        elgg_get_session()->setLoggedInUser($user);
+        \elgg_get_session()->setLoggedInUser($user);
 
-        $output = elgg_view('notifications/subscriptions/personal', [
+        $output = \elgg_view('notifications/subscriptions/personal', [
             'entity' => $user,
         ]);
 
         $this->assertIsString($output);
 
-        elgg_get_session()->removeLoggedInUser();
+        \elgg_get_session()->removeLoggedInUser();
     }
 
     /**
      * @return void
      */
     public function testPluginSettingsViewRendersWithDefaults(): void {
-        $plugin = elgg_get_plugin_from_id('user_settings');
+        $plugin = \elgg_get_plugin_from_id('user_settings');
         if (!$plugin) {
             $this->markTestSkipped('user_settings plugin not installed');
         }
 
-        $output = elgg_view('plugins/user_settings/settings', [
+        $output = \elgg_view('plugins/user_settings/settings', [
             'entity' => $plugin,
         ]);
 

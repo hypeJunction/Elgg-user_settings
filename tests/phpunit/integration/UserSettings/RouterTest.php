@@ -31,7 +31,7 @@ class RouterTest extends IntegrationTestCase {
      */
     public function testNotificationsRouteRewritesPersonalForLoggedInUser(): void {
         $user = $this->createUser();
-        elgg_get_session()->setLoggedInUser($user);
+        \elgg_get_session()->setLoggedInUser($user);
 
         $value = [
             'identifier' => 'notifications',
@@ -45,7 +45,7 @@ class RouterTest extends IntegrationTestCase {
         $this->assertEquals('settings', $result['identifier']);
         $this->assertEquals(['notifications', $user->username], $result['segments']);
 
-        elgg_get_session()->removeLoggedInUser();
+        \elgg_get_session()->removeLoggedInUser();
     }
 
     /**
@@ -72,7 +72,7 @@ class RouterTest extends IntegrationTestCase {
      */
     public function testNotificationsRouteDefaultsToPersonal(): void {
         $user = $this->createUser();
-        elgg_get_session()->setLoggedInUser($user);
+        \elgg_get_session()->setLoggedInUser($user);
 
         $value = [
             'identifier' => 'notifications',
@@ -86,7 +86,7 @@ class RouterTest extends IntegrationTestCase {
         $this->assertEquals('settings', $result['identifier']);
         $this->assertEquals('notifications', $result['segments'][0]);
 
-        elgg_get_session()->removeLoggedInUser();
+        \elgg_get_session()->removeLoggedInUser();
     }
 
     /**
