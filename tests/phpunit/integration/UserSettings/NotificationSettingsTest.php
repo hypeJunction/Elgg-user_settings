@@ -47,7 +47,7 @@ class NotificationSettingsTest extends IntegrationTestCase {
         $user = $this->createUser();
         $user->collections_notifications_preferences_email = '-1';
 
-        _elgg_services()->entityCache->delete($user->guid);
+        \_elgg_services()->entityCache->delete($user->guid);
         $loaded = get_entity($user->guid);
         $this->assertEquals('-1', $loaded->collections_notifications_preferences_email);
     }
@@ -86,9 +86,9 @@ class NotificationSettingsTest extends IntegrationTestCase {
 
         // Iron law: a non-admin non-owner must not be able to edit the user
         // entity whose notifications settings they're attempting to change.
-        _elgg_services()->session_manager->setLoggedInUser($other);
+        \_elgg_services()->session_manager->setLoggedInUser($other);
         $this->assertFalse($owner->canEdit($other->guid));
-        _elgg_services()->session_manager->removeLoggedInUser();
+        \_elgg_services()->session_manager->removeLoggedInUser();
     }
 
     /**
@@ -97,9 +97,9 @@ class NotificationSettingsTest extends IntegrationTestCase {
     public function testOwnerCanModifyOwnSubscriptions(): void {
         $owner = $this->createUser();
 
-        _elgg_services()->session_manager->setLoggedInUser($owner);
+        \_elgg_services()->session_manager->setLoggedInUser($owner);
         $this->assertTrue($owner->canEdit($owner->guid));
-        _elgg_services()->session_manager->removeLoggedInUser();
+        \_elgg_services()->session_manager->removeLoggedInUser();
     }
 
     /**
@@ -110,8 +110,8 @@ class NotificationSettingsTest extends IntegrationTestCase {
         $admin = $this->createUser();
         $admin->makeAdmin();
 
-        _elgg_services()->session_manager->setLoggedInUser($admin);
+        \_elgg_services()->session_manager->setLoggedInUser($admin);
         $this->assertTrue($owner->canEdit($admin->guid));
-        _elgg_services()->session_manager->removeLoggedInUser();
+        \_elgg_services()->session_manager->removeLoggedInUser();
     }
 }
