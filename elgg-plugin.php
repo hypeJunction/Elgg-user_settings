@@ -48,4 +48,7 @@ return [
 			'elements/tables/notifications.css' => [],
 		],
 	],
+	'upgrades' => [
+		\UserSettings\Upgrades\MigrateSwitchSettings::class,
+	],
 ];

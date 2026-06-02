@@ -27,8 +27,7 @@ foreach ($NOTIFICATION_HANDLERS as $method => $foo) {
 	$user->$metaname = $collections[$method];
 
 	$subscriptions[$method] = get_input($method.'subscriptions');
-	remove_entity_relationships($user->guid, 'notify' . $method, false, 'user');
-	remove_entity_relationships($user->guid, 'notify' . $method, false, 'group');
+	$user->removeAllRelationships('notify' . $method);
 }
 
 // Add new ones

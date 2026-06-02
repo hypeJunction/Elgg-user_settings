@@ -10,13 +10,10 @@ if (!$user instanceof ElggUser) {
 	return;
 }
 
-$default_access = $user->getPrivateSetting('elgg_default_access');
-if ($default_access === null) {
-	$default_access = elgg_get_config('default_access');
-}
+$default_access = $user->getMetadata('elgg_default_access') ?? elgg_get_config('default_access');
 
 $title = elgg_echo('default_access:settings');
-$content = elgg_view_input('access', array(
+$content = elgg_view('input/access', array(
 	'name' => 'default_access',
 	'value' => $default_access,
 	'label' => elgg_echo('default_access:label'),

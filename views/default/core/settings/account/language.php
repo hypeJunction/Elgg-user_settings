@@ -7,7 +7,7 @@ if (!$user instanceof ElggUser) {
 }
 
 $title = elgg_echo('user:set:language');
-$content = elgg_view_input('select', array(
+$content = elgg_view('input/select', array(
 	'name' => 'language',
 	'value' => $user->language,
 	'options_values' => elgg()->translator->getInstalledTranslations(),
