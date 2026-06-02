@@ -16,7 +16,7 @@ if ($default_access === null) {
 }
 
 $title = elgg_echo('default_access:settings');
-$content = elgg_view_input('access', array(
+$content = elgg_view('input/access', array(
 	'name' => 'default_access',
 	'value' => $default_access,
 	'label' => elgg_echo('default_access:label'),

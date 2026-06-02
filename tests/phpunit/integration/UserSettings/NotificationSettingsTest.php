@@ -59,8 +59,8 @@ class NotificationSettingsTest extends IntegrationTestCase {
         $subscriber = $this->createUser();
         $target = $this->createUser();
 
-        $subscriber->addRelationship($target->guid, 'notifyemail');
-        $this->assertTrue($subscriber->hasRelationship($target->guid, 'notifyemail'));
+        $subscriber->addRelationship($target->guid, 'notify:email');
+        $this->assertTrue($subscriber->hasRelationship($target->guid, 'notify:email'));
     }
 
     /**
@@ -70,11 +70,11 @@ class NotificationSettingsTest extends IntegrationTestCase {
         $subscriber = $this->createUser();
         $target = $this->createUser();
 
-        $subscriber->addRelationship($target->guid, 'notifyemail');
-        $this->assertTrue($subscriber->hasRelationship($target->guid, 'notifyemail'));
+        $subscriber->addRelationship($target->guid, 'notify:email');
+        $this->assertTrue($subscriber->hasRelationship($target->guid, 'notify:email'));
 
-        remove_entity_relationships($subscriber->guid, 'notifyemail', false, 'user');
-        $this->assertFalse($subscriber->hasRelationship($target->guid, 'notifyemail'));
+        remove_entity_relationships($subscriber->guid, 'notify:email', false, 'user');
+        $this->assertFalse($subscriber->hasRelationship($target->guid, 'notify:email'));
     }
 
     /**

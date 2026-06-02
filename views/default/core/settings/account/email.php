@@ -7,7 +7,7 @@ if (!$user instanceof ElggUser) {
 }
 
 $title = elgg_echo('email:settings');
-$content = elgg_view_input('email', array(
+$content = elgg_view('input/email', array(
 	'name' => 'email',
 	'value' => $user->email,
 	'label' => elgg_echo('email:address:label'),
