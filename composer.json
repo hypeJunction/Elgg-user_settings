@@ -1,6 +1,5 @@
 {
     "name": "hypejunction/user_settings",
-    "version": "7.0.0",
     "type": "elgg-plugin",
     "description": "Improved settings pages for Elgg",
     "homepage": "https://github.com/hypeJunction/Elgg-user_settings",
