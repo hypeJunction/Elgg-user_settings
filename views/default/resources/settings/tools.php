@@ -24,7 +24,7 @@ if ($plugin_id) {
 	if (elgg_language_key_exists($plugin_id . ':usersettings:title')) {
 		$title = elgg_echo($plugin_id . ':usersettings:title');
 	} else {
-		$title = $plugin->getManifest()->getName();
+		$title = $plugin->getDisplayName();
 	}
 
 	elgg_push_breadcrumb(elgg_echo('user:settings:tools'), "settings/plugins/$entity->username");
@@ -40,7 +40,7 @@ if ($plugin_id) {
 			if (elgg_language_key_exists($plugin_id . ':usersettings:title')) {
 				$mod_title = elgg_echo($plugin_id . ':usersettings:title');
 			} else {
-				$mod_title = $plugin->getManifest()->getName();
+				$mod_title = $plugin->getDisplayName();
 			}
 			$mod_body = elgg_view_form('plugins/usersettings/save', array(), array('entity' => $plugin));
 			if (empty($mod_body)) {
