@@ -4,20 +4,9 @@ if (!$user instanceof ElggUser) {
 	return;
 }
 
-/**
- * Compare two subscription entries by their display name.
- *
- * @param array $a First entry
- * @param array $b Second entry
- * @return int
- */
-function subscriptions_compare_by_name($a, $b) {
-	$an = $a['name'];
-	$bn = $b['name'];
-
-	$result = strnatcmp($an, $bn);
-	return $result;
-}
+// A view is rendered repeatedly in one request, so a top-level `function` here
+// fatals with "Cannot redeclare" the second time. Use an inline comparator.
+$subscriptions_compare_by_name = static fn ($a, $b): int => strnatcmp($a['name'], $b['name']);
 
 $methods = array_keys(_elgg_services()->notifications->getMethods());
 
@@ -57,7 +46,7 @@ if (empty($subscriptions_list)) {
 	return;
 }
 
-usort($subscriptions_list, 'subscriptions_compare_by_name');
+usort($subscriptions_list, $subscriptions_compare_by_name);
 
 $subscriptions_count = count($subscriptions_list);
 $subscription_guids = array_keys($subscriptions_list);
@@ -185,7 +174,7 @@ foreach ($collections as $collection) {
 		$members_list[$member_guid] = $subscriptions_list[$member_guid];
 	}
 
-	usort($members_list, 'subscriptions_compare_by_name');
+	usort($members_list, $subscriptions_compare_by_name);
 	$members_count = count($members_list);
 	?>
 	<tr class="elgg-subscriptions-collection">

@@ -8,6 +8,15 @@ return [
 		'description' => 'Improves UI/UX of user settings and notification preferences pages.',
 		'author' => 'Ismayil Khayredinov',
 		'category' => 'notifications',
+		// The account/notification setting views call elgg_view_input(), a BC shim
+		// that ships with forms_api. Without this dependency those pages fatal with
+		// "Call to undefined function elgg_view_input()" wherever forms_api is
+		// inactive (bd elgg-migrate-ckn0c).
+		'dependencies' => [
+			'forms_api' => [
+				'position' => 'after',
+			],
+		],
 	],
 
 	'bootstrap' => \UserSettings\Bootstrap::class,
